@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Exchange_Rates</string>
+    <string name="title_home">Home</string>
+    <string name="currency_dropdown_label">Selected Currency:</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="selected_currency">Selected Currency:</string>
+    <string name="select_the_timespan">Select the Timespan:</string>
+</resources>
