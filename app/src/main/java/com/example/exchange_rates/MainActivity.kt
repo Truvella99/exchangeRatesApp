@@ -14,10 +14,12 @@ import com.example.exchange_rates.databinding.ActivityMainBinding
 import com.example.exchange_rates.repositories.ExchangeRatesRepository
 import com.example.exchange_rates.ui.dashboard.DashboardFragment
 import com.example.exchange_rates.ui.home.HomeFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

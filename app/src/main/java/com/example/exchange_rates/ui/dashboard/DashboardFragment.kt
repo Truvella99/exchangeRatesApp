@@ -4,14 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.exchange_rates.NavArgs
 import com.example.exchange_rates.databinding.FragmentDashboardBinding
+import com.example.exchange_rates.ui.util.TimeSpan
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
@@ -20,14 +25,16 @@ class DashboardFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private var selectedCurrency: String? = null
-    private var baseCurrency: String? = null
+    private val dashboardViewModel : DashboardViewModel by viewModels()
+
+    private lateinit var selectedCurrency: String
+    private lateinit var baseCurrency: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            selectedCurrency = it.getString(NavArgs.SELECTED_CURRENCY)
-            baseCurrency = it.getString(NavArgs.BASE_CURRENCY)
+            selectedCurrency = it.getString(NavArgs.SELECTED_CURRENCY)!!
+            baseCurrency = it.getString(NavArgs.BASE_CURRENCY)!!
         }
     }
 
@@ -36,36 +43,42 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
+        // retrieve the data
+        dashboardViewModel.fetchHistoricalTimeSeriesRates(baseCurrency,selectedCurrency)
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize ViewModel
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         val dropdown: Spinner = binding.timespan
-        val adapterItems = arrayOf("24 hours","48 hours","7 days","30 days")
+        val adapterItems = TimeSpan.entries
         val timeSpanAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, adapterItems)
         val initialPosition = adapterItems.indexOf(dashboardViewModel.selectedTimeSpan.value)
         dropdown.adapter = timeSpanAdapter
         dropdown.setSelection(initialPosition)
 
-        val adapter = TimeSpanListAdapter(listOf("$baseCurrency -> $selectedCurrency"))
-        binding.itemsRecyclerViewTimeSpan.layoutManager = LinearLayoutManager(requireContext())
-        binding.itemsRecyclerViewTimeSpan.adapter = adapter
+        dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedItem = parent.getItemAtPosition(position).toString()
+                dashboardViewModel.setTimeSpan(selectedItem)
+                dashboardViewModel.fetchHistoricalTimeSeriesRates(baseCurrency,selectedCurrency)
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+
+        dashboardViewModel.historicalData.observe(viewLifecycleOwner) { historicalData ->
+            val adapter = TimeSpanListAdapter(historicalData)
+            context?.let { ctx ->
+                binding.itemsRecyclerViewTimeSpan.layoutManager = LinearLayoutManager(ctx)
+                binding.itemsRecyclerViewTimeSpan.adapter = adapter
+            }
+        }
+
         // go back button
         binding.fabBack.setOnClickListener {
             parentFragmentManager.popBackStack()

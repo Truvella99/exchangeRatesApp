@@ -6,9 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.exchange_rates.dataModels.ExchangeRate
 
 class TimeSpanListAdapter(
-    private var items: List<String>
+    private var items: List<ExchangeRate>
 ) : RecyclerView.Adapter<TimeSpanListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -25,6 +26,6 @@ class TimeSpanListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currency = items[position]
-        holder.textView.text = currency
+        holder.textView.text = "$currency (${currency.date})"
     }
 }

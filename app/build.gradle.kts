@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    id("dagger.hilt.android.plugin")
+    kotlin("kapt")
 }
 
 android {
@@ -55,4 +57,11 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    // Hilt dependencies
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }

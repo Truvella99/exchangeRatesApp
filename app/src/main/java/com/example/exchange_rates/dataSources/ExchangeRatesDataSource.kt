@@ -17,15 +17,16 @@ import okhttp3.Request
 import okhttp3.OkHttpClient
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class ExchangeRatesDataSource(
-    private val ioDispatcher: CoroutineDispatcher
+class ExchangeRatesDataSource @Inject constructor(
+    private val ioDispatcher: CoroutineDispatcher,
+    private val client: OkHttpClient
 ) {
     /**
      * Fetches the latest news from the network and returns the result.
      * This executes on an IO-optimized thread pool, the function is main-safe.
      */
-    private val client = OkHttpClient()
     private val HOST = "api.unirateapi.com"
     private val API_KEY = "McqqoOq3wPJU6aJXJ5jNxIZQesQbsVzOISaqgROrzIvhKUb6vIIWqAgCQ4xKM8wR"
 
