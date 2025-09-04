@@ -7,12 +7,14 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.exchange_rates.R
+import android.R as iconR
+import com.example.exchange_rates.dataModels.ExchangeRate
 
 class HomeListAdapter(
-    private var items: List<String>,
-    private val favourites: MutableMap<String, Boolean>,
-    private val onFavouriteToggle: (String) -> Unit,
-    private val onItemClick: (String) -> Unit
+    private var items: List<ExchangeRate>,
+    private val favourites: Map<ExchangeRate, Boolean>,
+    private val onFavouriteToggle: (ExchangeRate) -> Unit,
+    private val onItemClick: (ExchangeRate) -> Unit
 ) : RecyclerView.Adapter<HomeListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -30,13 +32,13 @@ class HomeListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currency = items[position]
-        holder.textView.text = currency
+        holder.textView.text = currency.toString()
 
         val isFavourite = favourites[currency] ?: false
         val starIconRes = if (isFavourite) {
-            R.drawable.ic_home_black_24dp  // filled star drawable
+            iconR.drawable.btn_star_big_on  // filled star drawable
         } else {
-            R.drawable.ic_launcher_background  // outline star drawable
+            iconR.drawable.btn_star_big_off  // outline star drawable
         }
         holder.starButton.setImageResource(starIconRes)
 

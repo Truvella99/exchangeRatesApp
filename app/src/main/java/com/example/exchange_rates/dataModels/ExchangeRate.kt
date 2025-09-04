@@ -6,4 +6,8 @@ data class ExchangeRate(
     val destinationCurrency: String,
     val date: LocalDate,
     val exchangeRate: Float
-)
+){
+    override fun toString(): String {
+        return "$destinationCurrency: $exchangeRate"
+    }
+}

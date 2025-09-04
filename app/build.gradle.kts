@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    kotlin("plugin.serialization") version "1.8.0"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -52,6 +52,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 }
