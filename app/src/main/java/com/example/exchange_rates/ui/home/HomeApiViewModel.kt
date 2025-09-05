@@ -1,6 +1,5 @@
 package com.example.exchange_rates.ui.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +10,7 @@ import com.example.exchange_rates.useCases.GetCurrenciesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.example.exchange_rates.ui.util.Result
 
 // ViewModel tied with Activity Lifecycle scope to avoid calling api more times
 @HiltViewModel
@@ -28,6 +28,15 @@ class HomeApiViewModel @Inject constructor(
         _selectedCurrency.value = currency
     }
 
+    private val _errorMessage = MutableLiveData<String>().apply {
+        value = ""
+    }
+    val errorMessage: LiveData<String> = _errorMessage
+
+    fun clearError() {
+        _errorMessage.value = ""
+    }
+
     private var _currencies = MutableLiveData<List<String>>().apply {
         value = listOf()
     }
@@ -42,8 +51,10 @@ class HomeApiViewModel @Inject constructor(
         // first time empty state, then only if currency changes
         if (_exchangeRates.value!!.isEmpty() || _selectedCurrency.value != selectedCurrency) {
             viewModelScope.launch {
-                val latestExchangeRates = fetchLatestExchangeUseCase(_selectedCurrency.value!!)
-                _exchangeRates.value = latestExchangeRates.associateWith { false }.toMutableMap()
+                when (val result = fetchLatestExchangeUseCase(_selectedCurrency.value!!)) {
+                    is Result.Success -> _exchangeRates.value = result.data.associateWith { false }.toMutableMap()
+                    is Result.Error -> _errorMessage.value = result.message
+                }
             }
         }
     }
@@ -52,8 +63,10 @@ class HomeApiViewModel @Inject constructor(
         // only first time when empty state
         if (_currencies.value!!.isEmpty()) {
             viewModelScope.launch {
-                val currencies = getCurrenciesUseCase()
-                _currencies.value = currencies
+                when (val result = getCurrenciesUseCase()) {
+                    is Result.Success -> _currencies.value = result.data
+                    is Result.Error -> _errorMessage.value = result.message
+                }
             }
         }
     }

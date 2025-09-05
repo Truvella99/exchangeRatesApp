@@ -4,6 +4,7 @@ import com.example.exchange_rates.dataModels.ExchangeRate
 import com.example.exchange_rates.repositories.ExchangeRatesRepository
 import java.time.LocalDate
 import javax.inject.Inject
+import com.example.exchange_rates.ui.util.Result
 
 class FetchHistoricalTimeSeriesUseCase @Inject constructor(private val exchangeRatesRepository: ExchangeRatesRepository) {
     // using operator function
@@ -12,7 +13,7 @@ class FetchHistoricalTimeSeriesUseCase @Inject constructor(private val exchangeR
         destinationCurrency: String,
         startDate: LocalDate,
         endDate: LocalDate
-    ): List<ExchangeRate> {
+    ): Result<List<ExchangeRate>> {
         return exchangeRatesRepository.fetchHistoricalTimeSeriesRates(
             baseCurrency,
             destinationCurrency,

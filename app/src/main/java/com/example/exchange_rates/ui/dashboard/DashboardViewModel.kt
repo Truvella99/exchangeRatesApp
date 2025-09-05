@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.exchange_rates.dataModels.ExchangeRate
+import com.example.exchange_rates.ui.util.Result
 import com.example.exchange_rates.ui.util.TimeSpan
 import com.example.exchange_rates.useCases.FetchHistoricalTimeSeriesUseCase
 import com.example.exchange_rates.useCases.FetchLatestExchangeUseCase
@@ -28,6 +29,15 @@ class DashboardViewModel @Inject constructor(
         _selectedTimeSpan.value = TimeSpan.fromDisplayName(timeSpan)
     }
 
+    private val _errorMessage = MutableLiveData<String>().apply {
+        value = ""
+    }
+    val errorMessage: LiveData<String> = _errorMessage
+
+    fun clearError() {
+        _errorMessage.value = ""
+    }
+
     private val _historicalData = MutableLiveData<List<ExchangeRate>>()
 
     val historicalData: LiveData<List<ExchangeRate>> = _historicalData
@@ -47,8 +57,10 @@ class DashboardViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val histData = fetchHistoricalTimeSeriesUseCase(baseCurrency,destinationCurrency,startDate,endDate)
-            _historicalData.value = histData.sortedByDescending { it.date }
+            when (val result = fetchHistoricalTimeSeriesUseCase(baseCurrency,destinationCurrency,startDate,endDate)) {
+                is Result.Success -> _historicalData.value = result.data.sortedByDescending { it.date }
+                is Result.Error -> _errorMessage.value = result.message
+            }
         }
     }
 

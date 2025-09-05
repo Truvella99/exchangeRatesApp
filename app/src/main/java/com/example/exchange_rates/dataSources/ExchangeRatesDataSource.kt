@@ -2,9 +2,9 @@ package com.example.exchange_rates.dataSources
 
 import android.util.Log
 import com.example.exchange_rates.dataModels.ExchangeRate
-import kotlinx.serialization.decodeFromString
 import com.example.exchange_rates.dataModels.ExchangeRatesApiModel
 import com.example.exchange_rates.dataModels.HistoricalTimeSeriesApiModel
+import com.example.exchange_rates.ui.util.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.InternalSerializationApi
@@ -30,7 +30,7 @@ class ExchangeRatesDataSource @Inject constructor(
     private val HOST = "api.unirateapi.com"
     private val API_KEY = "McqqoOq3wPJU6aJXJ5jNxIZQesQbsVzOISaqgROrzIvhKUb6vIIWqAgCQ4xKM8wR"
 
-    suspend fun getAllCurrencies(): List<String> =
+    suspend fun getAllCurrencies(): Result<List<String>> =
         withContext(ioDispatcher) {
 
             val urlBuilder = HttpUrl.Builder()
@@ -49,23 +49,22 @@ class ExchangeRatesDataSource @Inject constructor(
                 .build()
 
             // Execute request
-            val httpResponse = client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    throw Exception("HTTP error ${response.code}: ${response.message}")
-                }
-                response.body?.string() ?: throw Exception("Empty response body")
+            val httpCall = client.newCall(request).execute()
+            val httpBody = httpCall.body?.string()
+            if(!httpCall.isSuccessful || httpBody?.isEmpty() == true) {
+                return@withContext Result.Error("HTTP error ${httpCall.code}: unable to fetch all currencies.")
             }
 
-            val jsonElement = Json.parseToJsonElement(httpResponse)
+            val jsonElement = Json.parseToJsonElement(httpBody!!)
             val currenciesJsonArray = jsonElement.jsonObject["currencies"]?.jsonArray
 
             val currenciesList: List<String> =
                 currenciesJsonArray?.map { it.jsonPrimitive.content } ?: emptyList()
-            currenciesList
+            Result.Success(currenciesList)
         }
 
     @OptIn(InternalSerializationApi::class)
-    suspend fun fetchLatestExchangeRates(baseCurrency: String): List<ExchangeRate> =
+    suspend fun fetchLatestExchangeRates(baseCurrency: String): Result<List<ExchangeRate>> =
     // Move the execution to an IO-optimized thread since the ApiService
         // doesn't support coroutines and makes synchronous requests.
         withContext(ioDispatcher) {
@@ -87,22 +86,21 @@ class ExchangeRatesDataSource @Inject constructor(
                 .build()
 
             // Execute request
-            val httpResponse = client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) {
-                    throw Exception("HTTP error ${response.code}: ${response.message} $url")
-                }
-                response.body?.string() ?: throw Exception("Empty response body")
+            val httpCall = client.newCall(request).execute()
+            val httpBody = httpCall.body?.string()
+            if(!httpCall.isSuccessful || httpBody?.isEmpty() == true) {
+                return@withContext Result.Error("HTTP error ${httpCall.code}: unable to fetch home latest exchange rates of $baseCurrency")
             }
 
             val json = Json { ignoreUnknownKeys = true }
-            val response = json.decodeFromString<ExchangeRatesApiModel>(httpResponse)
+            val response = json.decodeFromString<ExchangeRatesApiModel>(httpBody!!)
             // convert to Exchange Rate
             val date = LocalDate.now()
             val baseCurrency = response.baseCurrency
             val result = response.rates.map { (destinationCurrency, rate) ->
                 ExchangeRate(baseCurrency, destinationCurrency, date, rate)
             }
-            result
+            Result.Success(result)
         }
 
     @OptIn(InternalSerializationApi::class)
@@ -111,7 +109,7 @@ class ExchangeRatesDataSource @Inject constructor(
         destinationCurrency: String,
         startDate: LocalDate,
         endDate: LocalDate
-    ): List<ExchangeRate> = withContext(ioDispatcher) {
+    ): Result<List<ExchangeRate>> = withContext(ioDispatcher) {
 
         val urlBuilder = HttpUrl.Builder()
             .scheme("https")
@@ -125,21 +123,20 @@ class ExchangeRatesDataSource @Inject constructor(
             .addQueryParameter("format", "json")
 
         val url = urlBuilder.build()
-
+        Log.e("APII", url.toString())
         val request = Request.Builder()
             .url(url)
             .get()
             .build()
 
-        val httpResponse = client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) {
-                throw Exception("HTTP error ${response.code}: ${response.message} $url")
-            }
-            response.body?.string() ?: throw Exception("Empty response body")
+        val httpCall = client.newCall(request).execute()
+        val httpBody = httpCall.body?.string()
+        if(!httpCall.isSuccessful || httpBody?.isEmpty() == true) {
+            return@withContext Result.Error("HTTP error ${httpCall.code}: unable to fetch historical data on $destinationCurrency")
         }
 
         val json = Json { ignoreUnknownKeys = true }
-        val response = json.decodeFromString<HistoricalTimeSeriesApiModel>(httpResponse)
+        val response = json.decodeFromString<HistoricalTimeSeriesApiModel>(httpBody!!)
 
         // Map the response data to List<ExchangeRate>
         val result = response.data.flatMap { (dateString, ratesMap) ->
@@ -153,6 +150,6 @@ class ExchangeRatesDataSource @Inject constructor(
                 )
             }
         }
-        result
+        Result.Success(result)
     }
 }
