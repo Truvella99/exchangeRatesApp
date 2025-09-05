@@ -1,15 +1,13 @@
-package com.example.exchange_rates.ui.dashboard
+package com.example.exchange_rates.presentation.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.exchange_rates.dataModels.ExchangeRate
-import com.example.exchange_rates.ui.util.Result
-import com.example.exchange_rates.ui.util.TimeSpan
-import com.example.exchange_rates.useCases.FetchHistoricalTimeSeriesUseCase
-import com.example.exchange_rates.useCases.FetchLatestExchangeUseCase
-import com.example.exchange_rates.useCases.GetCurrenciesUseCase
+import com.example.exchange_rates.data.model.ExchangeRate
+import com.example.exchange_rates.util.Result
+import com.example.exchange_rates.util.TimeSpan
+import com.example.exchange_rates.domain.usecases.FetchHistoricalTimeSeriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate

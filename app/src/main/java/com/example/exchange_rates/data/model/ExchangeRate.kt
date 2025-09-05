@@ -1,4 +1,5 @@
-package com.example.exchange_rates.dataModels
+package com.example.exchange_rates.data.model
+
 import java.time.LocalDate
 
 data class ExchangeRate(

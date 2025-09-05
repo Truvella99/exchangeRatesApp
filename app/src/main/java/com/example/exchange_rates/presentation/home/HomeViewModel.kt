@@ -1,4 +1,4 @@
-package com.example.exchange_rates.ui.home
+package com.example.exchange_rates.presentation.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

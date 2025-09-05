@@ -1,16 +1,16 @@
-package com.example.exchange_rates.ui.home
+package com.example.exchange_rates.presentation.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.exchange_rates.dataModels.ExchangeRate
-import com.example.exchange_rates.useCases.FetchLatestExchangeUseCase
-import com.example.exchange_rates.useCases.GetCurrenciesUseCase
+import com.example.exchange_rates.data.model.ExchangeRate
+import com.example.exchange_rates.domain.usecases.FetchLatestExchangeUseCase
+import com.example.exchange_rates.domain.usecases.GetCurrenciesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.example.exchange_rates.ui.util.Result
+import com.example.exchange_rates.util.Result
 
 // ViewModel tied with Activity Lifecycle scope to avoid calling api more times
 @HiltViewModel

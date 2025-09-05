@@ -1,4 +1,4 @@
-package com.example.exchange_rates.ui.util
+package com.example.exchange_rates.util
 
 enum class TimeSpan(val displayName: String) {
     HOURS_24("24 hours"),

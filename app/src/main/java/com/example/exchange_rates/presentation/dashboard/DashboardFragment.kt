@@ -1,4 +1,4 @@
-package com.example.exchange_rates.ui.dashboard
+package com.example.exchange_rates.presentation.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,17 +7,15 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.exchange_rates.NavArgs
 import com.example.exchange_rates.R as projectR
 import com.example.exchange_rates.databinding.FragmentDashboardBinding
-import com.example.exchange_rates.ui.util.TimeSpan
+import com.example.exchange_rates.util.TimeSpan
 import com.google.android.material.card.MaterialCardView
 import dagger.hilt.android.AndroidEntryPoint
 

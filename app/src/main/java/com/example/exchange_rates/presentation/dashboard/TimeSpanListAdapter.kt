@@ -1,12 +1,11 @@
-package com.example.exchange_rates.ui.dashboard
+package com.example.exchange_rates.presentation.dashboard
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.exchange_rates.dataModels.ExchangeRate
+import com.example.exchange_rates.data.model.ExchangeRate
 
 class TimeSpanListAdapter(
     private var items: List<ExchangeRate>

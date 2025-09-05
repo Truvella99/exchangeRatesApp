@@ -1,4 +1,4 @@
-package com.example.exchange_rates.ui.home
+package com.example.exchange_rates.presentation.home
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.exchange_rates.R
 import android.R as iconR
-import com.example.exchange_rates.dataModels.ExchangeRate
+import com.example.exchange_rates.data.model.ExchangeRate
 
 class HomeListAdapter(
     private var items: List<ExchangeRate>,

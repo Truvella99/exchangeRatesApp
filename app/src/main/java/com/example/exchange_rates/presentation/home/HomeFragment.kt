@@ -1,4 +1,4 @@
-package com.example.exchange_rates.ui.home
+package com.example.exchange_rates.presentation.home
 
 import android.R
 import com.example.exchange_rates.R as projectR
@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.os.bundleOf
