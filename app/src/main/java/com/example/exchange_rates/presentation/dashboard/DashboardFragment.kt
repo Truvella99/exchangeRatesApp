@@ -63,18 +63,20 @@ class DashboardFragment : Fragment() {
 
         val dropdown: Spinner = binding.timespan
         val adapterItems = TimeSpan.entries
-        val timeSpanAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, adapterItems)
-        val initialPosition = adapterItems.indexOf(dashboardViewModel.selectedTimeSpan.value)
-        dropdown.adapter = timeSpanAdapter
-        dropdown.setSelection(initialPosition)
+        context?.let { ctx ->
+            val timeSpanAdapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, adapterItems)
+            val initialPosition = adapterItems.indexOf(dashboardViewModel.selectedTimeSpan.value)
+            dropdown.adapter = timeSpanAdapter
+            dropdown.setSelection(initialPosition)
 
-        dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedItem = parent.getItemAtPosition(position).toString()
-                dashboardViewModel.setTimeSpan(selectedItem)
-                dashboardViewModel.fetchHistoricalTimeSeriesRates(baseCurrency,selectedCurrency)
+            dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                    val selectedItem = parent.getItemAtPosition(position).toString()
+                    dashboardViewModel.setTimeSpan(selectedItem)
+                    dashboardViewModel.fetchHistoricalTimeSeriesRates(baseCurrency,selectedCurrency)
+                }
+                override fun onNothingSelected(parent: AdapterView<*>) {}
             }
-            override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
         dashboardViewModel.historicalData.observe(viewLifecycleOwner) { historicalData ->

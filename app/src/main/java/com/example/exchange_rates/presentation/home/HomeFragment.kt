@@ -61,23 +61,25 @@ class HomeFragment : Fragment() {
         //get the spinner from the xml.
         homeApiViewModel.currencies.observe(viewLifecycleOwner) { currencies ->
             val dropdown: Spinner = binding.menu
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, currencies)
-            dropdown.adapter = adapter
+            context?.let { ctx ->
+                val adapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, currencies)
+                dropdown.adapter = adapter
 
-            // Optionally set selection if you want
-            val selected = homeApiViewModel.selectedCurrency.value
-            val initialPosition = currencies.indexOf(selected)
-            if (initialPosition >= 0) {
-                dropdown.setSelection(initialPosition)
-            }
-
-            dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                    val selectedItem = parent.getItemAtPosition(position).toString()
-                    homeApiViewModel.fetchLatestExchangeRates(selectedItem)
-                    homeApiViewModel.setCurrency(selectedItem)
+                // Optionally set selection if you want
+                val selected = homeApiViewModel.selectedCurrency.value
+                val initialPosition = currencies.indexOf(selected)
+                if (initialPosition >= 0) {
+                    dropdown.setSelection(initialPosition)
                 }
-                override fun onNothingSelected(parent: AdapterView<*>) {}
+
+                dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                        val selectedItem = parent.getItemAtPosition(position).toString()
+                        homeApiViewModel.fetchLatestExchangeRates(selectedItem)
+                        homeApiViewModel.setCurrency(selectedItem)
+                    }
+                    override fun onNothingSelected(parent: AdapterView<*>) {}
+                }
             }
         }
 
@@ -120,8 +122,10 @@ class HomeFragment : Fragment() {
                     navController.navigate(projectR.id.action_homeFragment_to_dashboardFragment2, bundle)
                 }
             )
-            binding.itemsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-            binding.itemsRecyclerView.adapter = tabsAdapter
+            context?.let { ctx ->
+                binding.itemsRecyclerView.layoutManager = LinearLayoutManager(ctx)
+                binding.itemsRecyclerView.adapter = tabsAdapter
+            }
 
             // Observe the selected tab state from ViewModel
             homeViewModel.selectedTabIndex.observe(viewLifecycleOwner) { selectedIndex ->
