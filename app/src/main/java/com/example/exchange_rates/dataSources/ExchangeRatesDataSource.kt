@@ -123,7 +123,7 @@ class ExchangeRatesDataSource @Inject constructor(
             .addQueryParameter("format", "json")
 
         val url = urlBuilder.build()
-        Log.e("APII", url.toString())
+
         val request = Request.Builder()
             .url(url)
             .get()
