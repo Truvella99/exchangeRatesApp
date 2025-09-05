@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -40,6 +41,7 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private val homeApiViewModel: HomeApiViewModel by activityViewModels()
     private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
@@ -51,8 +53,7 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         // fetch the data
-        homeViewModel.fetchLatestExchangeRates()
-        homeViewModel.getAllCurrencies()
+        homeApiViewModel.getAllCurrencies()
         /*val textView: TextView = binding.textHome
         homeViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
@@ -64,13 +65,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //get the spinner from the xml.
-        homeViewModel.currencies.observe(viewLifecycleOwner) { currencies ->
+        homeApiViewModel.currencies.observe(viewLifecycleOwner) { currencies ->
             val dropdown: Spinner = binding.menu
             val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, currencies)
             dropdown.adapter = adapter
 
             // Optionally set selection if you want
-            val selected = homeViewModel.selectedCurrency.value
+            val selected = homeApiViewModel.selectedCurrency.value
             val initialPosition = currencies.indexOf(selected)
             if (initialPosition >= 0) {
                 dropdown.setSelection(initialPosition)
@@ -79,8 +80,8 @@ class HomeFragment : Fragment() {
             dropdown.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     val selectedItem = parent.getItemAtPosition(position).toString()
-                    homeViewModel.setCurrency(selectedItem)
-                    homeViewModel.fetchLatestExchangeRates(true)
+                    homeApiViewModel.fetchLatestExchangeRates(selectedItem)
+                    homeApiViewModel.setCurrency(selectedItem)
                 }
                 override fun onNothingSelected(parent: AdapterView<*>) {}
             }
@@ -106,20 +107,19 @@ class HomeFragment : Fragment() {
         })
 
         // Observe currencies LiveData
-        homeViewModel.exchangeRates.observe(viewLifecycleOwner) { currencyMap ->
-            // Log.d("HomeFragment", "Currencies updated: $currencyMap")
+        homeApiViewModel.exchangeRates.observe(viewLifecycleOwner) { currencyMap ->
             val tabsAdapter = HomeListAdapter(
                 // start to tab 0 (favourites) so only true items
                 items = currencyMap.keys.toList(),
                 favourites = currencyMap,
                 onFavouriteToggle = { currency ->
-                    homeViewModel.toggleFavouriteCurrency(currency)
+                    homeApiViewModel.toggleFavouriteCurrency(currency)
                 },
                 onItemClick = { currency ->
                     // Navigate to the Dashboard Fragment
                     val bundle = bundleOf(
                         NavArgs.SELECTED_CURRENCY to currency.destinationCurrency,
-                        NavArgs.BASE_CURRENCY to homeViewModel.selectedCurrency.value
+                        NavArgs.BASE_CURRENCY to homeApiViewModel.selectedCurrency.value
                     )
 
                     val navController = view.findNavController()
