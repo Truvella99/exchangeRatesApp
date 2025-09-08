@@ -51,7 +51,7 @@ class RepositoryUseCaseUnitTest {
 
         // Assert
         assertTrue(result is Result.Success)
-        assertEquals(expectedData, (result as Result.Success).data)
+        assertEquals(expectedData, (result as? Result.Success)?.data)
         coVerify { exchangeRatesDataSourceApi.getAllCurrencies() }
     }
 

@@ -1,5 +1,6 @@
 package com.example.exchange_rates.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,6 +43,10 @@ class HomeApiViewModel @Inject constructor(
     }
     val currencies: LiveData<List<String>> = _currencies
 
+    fun setCurrencies(currencies: List<String>) {
+        _currencies.value = currencies
+    }
+
     private var _exchangeRates = MutableLiveData<MutableMap<ExchangeRate, Boolean>>().apply {
         value = mutableMapOf()
     }
@@ -51,7 +56,7 @@ class HomeApiViewModel @Inject constructor(
         // first time empty state, then only if currency changes
         if (_exchangeRates.value!!.isEmpty() || _selectedCurrency.value != selectedCurrency) {
             viewModelScope.launch {
-                when (val result = fetchLatestExchangeUseCase(_selectedCurrency.value!!)) {
+                when (val result = fetchLatestExchangeUseCase(selectedCurrency)) {
                     is Result.Success -> _exchangeRates.value = result.data.associateWith { false }.toMutableMap()
                     is Result.Error -> _errorMessage.value = result.message
                 }

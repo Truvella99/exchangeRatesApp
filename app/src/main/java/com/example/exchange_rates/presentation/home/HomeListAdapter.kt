@@ -53,8 +53,8 @@ class HomeListAdapter(
     fun updateItems(tabIndex: Int) {
         // 0 true items (favourites) 1 false items (not favourites)
         when (tabIndex) {
-            0 -> items = favourites.filter{ it.value }.keys.toList()
-            1 -> items = favourites.filter{ !it.value }.keys.toList()
+            0 -> items = favourites.filter{ !it.value }.keys.toList()
+            1 -> items = favourites.filter{ it.value }.keys.toList()
         }
         notifyDataSetChanged()
     }

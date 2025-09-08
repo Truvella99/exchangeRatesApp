@@ -3,6 +3,7 @@ package com.example.exchange_rates.presentation.home
 import android.R
 import com.example.exchange_rates.R as projectR
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -84,13 +85,13 @@ class HomeFragment : Fragment() {
         }
 
         val tabLayout: TabLayout = binding.simpleTabLayout
-        val firstTab: TabLayout.Tab = tabLayout.newTab() // Create a new Tab names
-        firstTab.text = "Favourites" // set the Text for the first Tab
-        firstTab.setIcon(R.drawable.star_on)
-        tabLayout.addTab(firstTab,true)
-        val secondTab: TabLayout.Tab = tabLayout.newTab() // Create a new Tab names
-        secondTab.text = "Others" // set the Text for the second Tab
-        secondTab.setIcon(R.drawable.ic_menu_search)
+        val firstTab: TabLayout.Tab = tabLayout.newTab() // Create a new Tab
+        firstTab.text = "Currencies" // set the Text for the second Tab
+        firstTab.setIcon(R.drawable.ic_menu_search)
+        tabLayout.addTab(firstTab, true)
+        val secondTab: TabLayout.Tab = tabLayout.newTab() // Create a new Tab
+        secondTab.text = "Favourites" // set the Text for the secondTab Tab
+        secondTab.setIcon(R.drawable.star_on)
         tabLayout.addTab(secondTab)
 
         // Setup tab selection listener to notify ViewModel when user taps a tab

@@ -9,6 +9,6 @@ data class ExchangeRate(
     val exchangeRate: Float
 ){
     override fun toString(): String {
-        return "$destinationCurrency: $exchangeRate"
+        return "$baseCurrency -> $destinationCurrency: $exchangeRate"
     }
 }
