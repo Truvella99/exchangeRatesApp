@@ -39,6 +39,11 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
 }
 
 dependencies {
@@ -52,6 +57,10 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("org.robolectric:robolectric:4.11.1")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
@@ -60,6 +69,7 @@ dependencies {
     // Hilt dependencies
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
+    testImplementation(kotlin("test"))
 }
 
 kapt {

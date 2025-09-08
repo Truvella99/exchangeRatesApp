@@ -1,5 +1,5 @@
 package com.example.exchange_rates.domain.repositories
-import com.example.exchange_rates.data.model.ExchangeRate
+import com.example.exchange_rates.domain.model.ExchangeRate
 import com.example.exchange_rates.util.Result
 import java.time.LocalDate
 

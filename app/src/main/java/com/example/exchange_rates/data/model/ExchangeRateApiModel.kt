@@ -1,4 +1,4 @@
-package com.example.exchange_rates.domain.model
+package com.example.exchange_rates.data.model
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

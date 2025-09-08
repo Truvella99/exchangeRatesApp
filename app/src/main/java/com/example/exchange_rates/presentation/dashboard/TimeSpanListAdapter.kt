@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.exchange_rates.data.model.ExchangeRate
+import com.example.exchange_rates.domain.model.ExchangeRate
 
 class TimeSpanListAdapter(
     private var items: List<ExchangeRate>

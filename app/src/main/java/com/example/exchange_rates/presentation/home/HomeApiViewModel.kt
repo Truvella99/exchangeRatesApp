@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.exchange_rates.data.model.ExchangeRate
+import com.example.exchange_rates.domain.model.ExchangeRate
 import com.example.exchange_rates.domain.usecases.FetchLatestExchangeUseCase
 import com.example.exchange_rates.domain.usecases.GetCurrenciesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

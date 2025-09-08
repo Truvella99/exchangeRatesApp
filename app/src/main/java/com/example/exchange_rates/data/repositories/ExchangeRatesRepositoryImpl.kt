@@ -1,6 +1,6 @@
 package com.example.exchange_rates.data.repositories
 
-import com.example.exchange_rates.data.model.ExchangeRate
+import com.example.exchange_rates.domain.model.ExchangeRate
 import com.example.exchange_rates.data.api.ExchangeRatesDataSourceApi
 import com.example.exchange_rates.domain.repositories.ExchangeRatesRepository
 import com.example.exchange_rates.util.Result

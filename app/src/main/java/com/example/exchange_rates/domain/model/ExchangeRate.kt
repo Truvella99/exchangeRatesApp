@@ -1,4 +1,4 @@
-package com.example.exchange_rates.data.model
+package com.example.exchange_rates.domain.model
 
 import java.time.LocalDate
 

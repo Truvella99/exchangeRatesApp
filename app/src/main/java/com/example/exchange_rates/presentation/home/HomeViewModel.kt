@@ -12,7 +12,14 @@ class HomeViewModel() : ViewModel() {
     val selectedTabIndex: LiveData<Int> get() = _selectedTabIndex
 
     fun selectTab(index: Int) {
-        _selectedTabIndex.value = index
+        _selectedTabIndex.value = set(index)
     }
 
+    private fun set(index: Int): Int {
+        if (index >= 0 && index <= 1) {
+            return index
+        } else {
+            return 0
+        }
+    }
 }

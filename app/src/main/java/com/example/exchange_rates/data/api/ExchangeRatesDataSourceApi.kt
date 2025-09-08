@@ -1,8 +1,8 @@
 package com.example.exchange_rates.data.api
 
-import com.example.exchange_rates.data.model.ExchangeRate
-import com.example.exchange_rates.domain.model.ExchangeRatesApiModel
-import com.example.exchange_rates.domain.model.HistoricalTimeSeriesApiModel
+import com.example.exchange_rates.domain.model.ExchangeRate
+import com.example.exchange_rates.data.model.ExchangeRatesApiModel
+import com.example.exchange_rates.data.model.HistoricalTimeSeriesApiModel
 import com.example.exchange_rates.util.Result
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -48,14 +48,16 @@ class ExchangeRatesDataSourceApi @Inject constructor(
 
             // Execute request
             val httpCall = client.newCall(request).execute()
+            if (!httpCall.isSuccessful) {
+                return@withContext Result.Error("HTTP error ${httpCall.code}: unable to fetch all currencies.")
+            }
             val httpBody = httpCall.body?.string()
-            if (!httpCall.isSuccessful || httpBody?.isEmpty() == true) {
+            if (httpBody.isNullOrEmpty()) {
                 return@withContext Result.Error("HTTP error ${httpCall.code}: unable to fetch all currencies.")
             }
 
-            val jsonElement = Json.Default.parseToJsonElement(httpBody!!)
+            val jsonElement = Json.Default.parseToJsonElement(httpBody)
             val currenciesJsonArray = jsonElement.jsonObject["currencies"]?.jsonArray
-
             val currenciesList: List<String> =
                 currenciesJsonArray?.map { it.jsonPrimitive.content } ?: emptyList()
             Result.Success(currenciesList)

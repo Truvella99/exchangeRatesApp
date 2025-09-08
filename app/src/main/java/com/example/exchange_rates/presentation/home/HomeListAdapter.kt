@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.exchange_rates.R
 import android.R as iconR
-import com.example.exchange_rates.data.model.ExchangeRate
+import com.example.exchange_rates.domain.model.ExchangeRate
 
 class HomeListAdapter(
     private var items: List<ExchangeRate>,
