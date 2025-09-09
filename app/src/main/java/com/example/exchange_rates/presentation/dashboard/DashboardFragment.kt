@@ -42,8 +42,8 @@ class DashboardFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            selectedCurrency = it.getString(NavArgs.SELECTED_CURRENCY)!!
-            baseCurrency = it.getString(NavArgs.BASE_CURRENCY)!!
+            selectedCurrency = it.getString(NavArgs.SELECTED_CURRENCY) ?: ""
+            baseCurrency = it.getString(NavArgs.BASE_CURRENCY) ?: ""
         }
     }
 

@@ -87,13 +87,16 @@ class ExchangeRatesDataSourceApi @Inject constructor(
 
             // Execute request
             val httpCall = client.newCall(request).execute()
+            if (!httpCall.isSuccessful) {
+                return@withContext Result.Error("HTTP error ${httpCall.code}: unable to fetch home latest exchange rates of $baseCurrency")
+            }
             val httpBody = httpCall.body?.string()
-            if (!httpCall.isSuccessful || httpBody?.isEmpty() == true) {
+            if (httpBody.isNullOrEmpty()) {
                 return@withContext Result.Error("HTTP error ${httpCall.code}: unable to fetch home latest exchange rates of $baseCurrency")
             }
 
             val json = Json { ignoreUnknownKeys = true }
-            val response = json.decodeFromString<ExchangeRatesApiModel>(httpBody!!)
+            val response = json.decodeFromString<ExchangeRatesApiModel>(httpBody)
             // convert to Exchange Rate
             val date = LocalDate.now()
             val baseCurrency = response.baseCurrency
@@ -130,13 +133,16 @@ class ExchangeRatesDataSourceApi @Inject constructor(
             .build()
 
         val httpCall = client.newCall(request).execute()
+        if (!httpCall.isSuccessful) {
+            return@withContext Result.Error("HTTP error ${httpCall.code}: unable to fetch historical data on $destinationCurrency")
+        }
         val httpBody = httpCall.body?.string()
-        if (!httpCall.isSuccessful || httpBody?.isEmpty() == true) {
+        if (httpBody.isNullOrEmpty()) {
             return@withContext Result.Error("HTTP error ${httpCall.code}: unable to fetch historical data on $destinationCurrency")
         }
 
         val json = Json { ignoreUnknownKeys = true }
-        val response = json.decodeFromString<HistoricalTimeSeriesApiModel>(httpBody!!)
+        val response = json.decodeFromString<HistoricalTimeSeriesApiModel>(httpBody)
 
         // Map the response data to List<ExchangeRate>
         val result = response.data.flatMap { (dateString, ratesMap) ->

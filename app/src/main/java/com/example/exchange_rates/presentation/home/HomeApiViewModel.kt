@@ -54,7 +54,7 @@ class HomeApiViewModel @Inject constructor(
 
     fun fetchLatestExchangeRates(selectedCurrency: String) {
         // first time empty state, then only if currency changes
-        if (_exchangeRates.value!!.isEmpty() || _selectedCurrency.value != selectedCurrency) {
+        if (_exchangeRates.value.isNullOrEmpty() || _selectedCurrency.value != selectedCurrency) {
             viewModelScope.launch {
                 when (val result = fetchLatestExchangeUseCase(selectedCurrency)) {
                     is Result.Success -> _exchangeRates.value = result.data.associateWith { false }.toMutableMap()
@@ -66,7 +66,7 @@ class HomeApiViewModel @Inject constructor(
 
     fun getAllCurrencies() {
         // only first time when empty state
-        if (_currencies.value!!.isEmpty()) {
+        if (_currencies.value.isNullOrEmpty()) {
             viewModelScope.launch {
                 when (val result = getCurrenciesUseCase()) {
                     is Result.Success -> _currencies.value = result.data
@@ -77,9 +77,11 @@ class HomeApiViewModel @Inject constructor(
     }
 
     fun toggleFavouriteCurrency(currency: ExchangeRate) {
-        val isFavourite = _exchangeRates.value?.get(currency)!!
-        _exchangeRates.value = _exchangeRates.value?.toMutableMap()?.apply {
-            put(currency, !isFavourite)
+        val isFavourite = _exchangeRates.value?.get(currency)
+        isFavourite?.let { isFavourite ->
+            _exchangeRates.value = _exchangeRates.value?.toMutableMap()?.apply {
+                put(currency, !isFavourite)
+            }
         }
     }
 }

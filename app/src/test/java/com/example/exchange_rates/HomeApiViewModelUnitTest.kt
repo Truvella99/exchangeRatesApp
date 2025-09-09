@@ -56,7 +56,7 @@ class HomeApiViewModelUnitTest {
         coEvery { getCurrenciesUseCase() } returns successResult
 
         // Verify initial state is empty
-        assertTrue(homeApiViewModel.currencies.value!!.isEmpty())
+        assertTrue(homeApiViewModel.currencies.value.isNullOrEmpty())
 
         // Act
         homeApiViewModel.getAllCurrencies()
@@ -75,7 +75,7 @@ class HomeApiViewModelUnitTest {
         coEvery { getCurrenciesUseCase() } returns errorResult
 
         // Verify initial state is empty
-        assertTrue(homeApiViewModel.currencies.value!!.isEmpty())
+        assertTrue(homeApiViewModel.currencies.value.isNullOrEmpty())
 
         // Act
         homeApiViewModel.getAllCurrencies()
@@ -83,7 +83,7 @@ class HomeApiViewModelUnitTest {
 
         // Assert
         assertEquals(errorMessage, homeApiViewModel.errorMessage.value)
-        assertTrue(homeApiViewModel.currencies.value!!.isEmpty()) // Currencies should remain empty
+        assertTrue(homeApiViewModel.currencies.value.isNullOrEmpty()) // Currencies should remain empty
         coVerify(exactly = 1) { getCurrenciesUseCase() }
     }
 

@@ -37,7 +37,7 @@ class HomeListAdapter(
         val currency = items[position]
         holder.baseCurrency.text = currency.baseCurrency
         holder.destinationCurrency.text = currency.destinationCurrency
-        holder.exchangeRate.text = DecimalFormat("#.00").format(currency.exchangeRate)
+        holder.exchangeRate.text = currency.exchangeRate.toString()
 
         val isFavourite = favourites[currency] ?: false
         val starIconRes = if (isFavourite) {

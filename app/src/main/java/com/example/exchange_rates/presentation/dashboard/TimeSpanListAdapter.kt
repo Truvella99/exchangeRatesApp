@@ -32,7 +32,7 @@ class TimeSpanListAdapter(
         val currency = items[position]
         holder.baseCurrency.text = currency.baseCurrency
         holder.destinationCurrency.text = currency.destinationCurrency
-        holder.exchangeRate.text = DecimalFormat("#.00").format(currency.exchangeRate)
+        holder.exchangeRate.text = currency.exchangeRate.toString()
         holder.date.text = currency.date.toString()
     }
 }
