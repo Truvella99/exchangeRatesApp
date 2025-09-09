@@ -6,4 +6,9 @@
     <string name="title_notifications">Notifications</string>
     <string name="selected_currency">Selected Currency:</string>
     <string name="select_the_timespan">Select the Timespan:</string>
+    <string name="home_description">Home screen of the application, that allows to select the base currency and display today\'s exchange rates with respect to the others. It also gives the possibility to select the favourites currencies.</string>
+    <string name="dashboard_description">Detail screen of the application, that allows to view historical exchange rates data of the home currency selected with the selected currency among the others. There is the possibility to see data up to 30 days ago.</string>
+    <string name="exchange_rate">Exchange Rate</string>
+    <string name="destination_currency">Destination Currency</string>
+    <string name="base_currency">Base Currency</string>
 </resources>

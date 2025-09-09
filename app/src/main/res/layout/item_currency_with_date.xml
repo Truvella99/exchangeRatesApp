@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/baseCurrencyItem"
+            android:id="@+id/detailBaseCurrencyItem"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -28,19 +28,7 @@
             android:ellipsize="end" />
 
         <TextView
-            android:id="@+id/destinationCurrencyItem"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.4"
-            android:gravity="center_vertical|start"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:padding="5dp"/>
-
-        <TextView
-            android:id="@+id/exchangeRateItem"
+            android:id="@+id/detailDestinationCurrencyItem"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -51,22 +39,29 @@
             android:ellipsize="end"
             android:padding="5dp"/>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/detailExchangeRateItem"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="center">
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:padding="5dp"/>
 
-            <ImageButton
-                android:id="@+id/star_button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="4dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/ic_home_black_24dp" />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/detailDateItem"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical|start"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:padding="5dp"/>
 
     </LinearLayout>
 

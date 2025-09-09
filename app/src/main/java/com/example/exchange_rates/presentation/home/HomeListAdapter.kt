@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.exchange_rates.R
 import android.R as iconR
 import com.example.exchange_rates.domain.model.ExchangeRate
+import java.text.DecimalFormat
 
 class HomeListAdapter(
     private var items: List<ExchangeRate>,
@@ -18,7 +19,9 @@ class HomeListAdapter(
 ) : RecyclerView.Adapter<HomeListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.currency_text)
+        val baseCurrency: TextView = view.findViewById(R.id.baseCurrencyItem)
+        val destinationCurrency: TextView = view.findViewById(R.id.destinationCurrencyItem)
+        val exchangeRate: TextView = view.findViewById(R.id.exchangeRateItem)
         val starButton: ImageButton = view.findViewById(R.id.star_button)
     }
 
@@ -32,7 +35,9 @@ class HomeListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currency = items[position]
-        holder.textView.text = currency.toString()
+        holder.baseCurrency.text = currency.baseCurrency
+        holder.destinationCurrency.text = currency.destinationCurrency
+        holder.exchangeRate.text = DecimalFormat("#.00").format(currency.exchangeRate)
 
         val isFavourite = favourites[currency] ?: false
         val starIconRes = if (isFavourite) {

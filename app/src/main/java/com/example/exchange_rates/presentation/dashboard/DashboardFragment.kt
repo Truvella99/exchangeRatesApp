@@ -1,5 +1,6 @@
 package com.example.exchange_rates.presentation.dashboard
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.exchange_rates.NavArgs
 import com.example.exchange_rates.R as projectR
 import com.example.exchange_rates.databinding.FragmentDashboardBinding
+import com.example.exchange_rates.domain.model.ExchangeRate
 import com.example.exchange_rates.util.TimeSpan
 import com.google.android.material.card.MaterialCardView
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
@@ -64,7 +67,7 @@ class DashboardFragment : Fragment() {
         val dropdown: Spinner = binding.timespan
         val adapterItems = TimeSpan.entries
         context?.let { ctx ->
-            val timeSpanAdapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, adapterItems)
+            val timeSpanAdapter = ArrayAdapter(ctx, R.layout.simple_spinner_dropdown_item, adapterItems)
             val initialPosition = adapterItems.indexOf(dashboardViewModel.selectedTimeSpan.value)
             dropdown.adapter = timeSpanAdapter
             dropdown.setSelection(initialPosition)

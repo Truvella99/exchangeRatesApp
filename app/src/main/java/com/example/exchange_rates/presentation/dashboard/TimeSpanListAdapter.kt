@@ -5,19 +5,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.exchange_rates.R
 import com.example.exchange_rates.domain.model.ExchangeRate
+import java.text.DecimalFormat
 
 class TimeSpanListAdapter(
     private var items: List<ExchangeRate>
 ) : RecyclerView.Adapter<TimeSpanListAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(android.R.id.text1)
+        val baseCurrency: TextView = view.findViewById(R.id.detailBaseCurrencyItem)
+        val destinationCurrency: TextView = view.findViewById(R.id.detailDestinationCurrencyItem)
+        val exchangeRate: TextView = view.findViewById(R.id.detailExchangeRateItem)
+        val date: TextView = view.findViewById(R.id.detailDateItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(android.R.layout.simple_list_item_1, parent, false)  // <-- custom layout
+            .inflate(R.layout.item_currency_with_date, parent, false)  // <-- custom layout
         return ViewHolder(view)
     }
 
@@ -25,6 +30,9 @@ class TimeSpanListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currency = items[position]
-        holder.textView.text = "$currency (${currency.date})"
+        holder.baseCurrency.text = currency.baseCurrency
+        holder.destinationCurrency.text = currency.destinationCurrency
+        holder.exchangeRate.text = DecimalFormat("#.00").format(currency.exchangeRate)
+        holder.date.text = currency.date.toString()
     }
 }
