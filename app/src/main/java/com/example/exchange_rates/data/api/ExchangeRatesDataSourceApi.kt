@@ -1,5 +1,6 @@
 package com.example.exchange_rates.data.api
 
+import android.util.Log
 import com.example.exchange_rates.domain.model.ExchangeRate
 import com.example.exchange_rates.data.model.ExchangeRatesApiModel
 import com.example.exchange_rates.data.model.HistoricalTimeSeriesApiModel
@@ -28,8 +29,14 @@ class ExchangeRatesDataSourceApi @Inject constructor(
     private val HOST = "api.unirateapi.com"
     private val API_KEY = "McqqoOq3wPJU6aJXJ5jNxIZQesQbsVzOISaqgROrzIvhKUb6vIIWqAgCQ4xKM8wR"
 
+    private val MOCK_API = false
+
     suspend fun getAllCurrencies(): Result<List<String>> =
         withContext(ioDispatcher) {
+            // Mock In Case Of Down Service
+            if(MOCK_API) {
+                return@withContext Result.Success(listOf("EUR","CHF","JPY"))
+            }
 
             val urlBuilder = HttpUrl.Builder()
                 .scheme("https")
@@ -68,6 +75,23 @@ class ExchangeRatesDataSourceApi @Inject constructor(
     // Move the execution to an IO-optimized thread since the ApiService
         // doesn't support coroutines and makes synchronous requests.
         withContext(ioDispatcher) {
+            // Mock In Case Of Down Service
+            if(MOCK_API) {
+                return@withContext Result.Success(listOf(
+                    ExchangeRate(
+                        baseCurrency = "EUR",
+                        destinationCurrency = "CHF",
+                        date = LocalDate.now(),
+                        exchangeRate = 1.24f
+                    ),
+                    ExchangeRate(
+                        baseCurrency = "EUR",
+                        destinationCurrency = "JPY",
+                        date = LocalDate.now(),
+                        exchangeRate = 1.04f
+                    )
+                ))
+            }
 
             val urlBuilder = HttpUrl.Builder()
                 .scheme("https")
@@ -113,6 +137,23 @@ class ExchangeRatesDataSourceApi @Inject constructor(
         startDate: LocalDate,
         endDate: LocalDate
     ): Result<List<ExchangeRate>> = withContext(ioDispatcher) {
+        // Mock In Case Of Down Service
+        if(MOCK_API) {
+            return@withContext Result.Success(listOf(
+                ExchangeRate(
+                    baseCurrency = "EUR",
+                    destinationCurrency = "CHF",
+                    date = LocalDate.now().minusDays(1),
+                    exchangeRate = 1.24f
+                ),
+                ExchangeRate(
+                    baseCurrency = "EUR",
+                    destinationCurrency = "CHF",
+                    date = LocalDate.now().minusDays(2),
+                    exchangeRate = 1.14f
+                )
+            ))
+        }
 
         val urlBuilder = HttpUrl.Builder()
             .scheme("https")

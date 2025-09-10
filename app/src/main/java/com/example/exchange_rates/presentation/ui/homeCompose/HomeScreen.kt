@@ -11,18 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -43,13 +38,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.exchange_rates.NavArgs
 import com.example.exchange_rates.R
@@ -136,12 +131,13 @@ fun HomeContent(state: HomeUiState, onEvent: (HomeUiEvent) -> Unit) {
                 }
             }
 
+            val screenWidth = LocalConfiguration.current.screenWidthDp.dp
             DropdownMenu(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(0.95f),
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false }
             ) {
-                Box(modifier = Modifier.size(width = 250.dp, height = 350.dp)) {
+                Box(modifier = Modifier.size(width = screenWidth, height = 250.dp)) {
                     LazyColumn {
                         items(state.currencies) { item ->
                             DropdownMenuItem(
@@ -161,13 +157,13 @@ fun HomeContent(state: HomeUiState, onEvent: (HomeUiEvent) -> Unit) {
         Spacer(Modifier.height(16.dp))
         Table(
             TableInfo(
-                column1Title = "Base Currency",
-                column2Title = "Destination Currency",
-                column3Title = "Exchange Rate",
+                baseCurrencyColumnTitle = "Base Currency",
+                destinationCurrencyColumnTitle = "Destination Currency",
+                exchangeRateColumnTitle = "Exchange Rate",
                 icon = Icons.Default.Star,
-                column1Weight = .25f,
-                column2Weight = .3f,
-                column3Weight = .25f,
+                baseCurrencyColumnWeight = .25f,
+                destinationCurrencyColumnWeight = .3f,
+                exchangeRateColumnWeight = .25f,
                 column4Weight = .2f,
                 data = if (state.selectedTabIndex == 0)
                     state.exchangeRates.filter { !it.value }.keys.toList()

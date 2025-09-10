@@ -27,12 +27,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.exchange_rates.domain.model.ExchangeRate
 import com.example.exchange_rates.presentation.ui.dashboardCompose.DashBoardUiEvent
-import com.example.exchange_rates.presentation.ui.homeCompose.HomeUiEvent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -49,9 +47,9 @@ fun<T> Table(
                 Modifier.background(Color.LightGray).fillMaxWidth().height(IntrinsicSize.Min).border(1.dp, Color.Black),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text( text = info.column1Title,
+                Text( text = info.baseCurrencyColumnTitle,
                     Modifier
-                        .weight(info.column1Weight)
+                        .weight(info.baseCurrencyColumnWeight)
                         .padding(8.dp),
                     textAlign = TextAlign.Center
                 )
@@ -61,9 +59,9 @@ fun<T> Table(
                         .width(1.dp),
                     thickness = DividerDefaults.Thickness, color = Color.Black
                 )
-                Text( text = info.column2Title,
+                Text( text = info.destinationCurrencyColumnTitle,
                     Modifier
-                        .weight(info.column2Weight)
+                        .weight(info.destinationCurrencyColumnWeight)
                         .padding(8.dp),
                     textAlign = TextAlign.Center
                 )
@@ -73,9 +71,9 @@ fun<T> Table(
                         .width(1.dp),
                     thickness = DividerDefaults.Thickness, color = Color.Black
                 )
-                Text( text = info.column3Title,
+                Text( text = info.exchangeRateColumnTitle,
                     Modifier
-                        .weight(info.column3Weight)
+                        .weight(info.exchangeRateColumnWeight)
                         .padding(8.dp),
                     textAlign = TextAlign.Center
                 )
@@ -105,9 +103,9 @@ fun<T> Table(
                 // Home Page where Favourites Data are Present
                 TableItem(
                     item,
-                    info.column1Weight,
-                    info.column2Weight,
-                    info.column3Weight,
+                    info.baseCurrencyColumnWeight,
+                    info.destinationCurrencyColumnWeight,
+                    info.exchangeRateColumnWeight,
                     info.column4Weight,
                     info.isDataFavourite[index],
                     navigateCallBack = navigateCallBack?.let { cb -> { cb(item)} },
@@ -118,9 +116,9 @@ fun<T> Table(
                 // DashBoard Page Where there are no Favourites
                 TableItem<DashBoardUiEvent>(
                     item,
-                    info.column1Weight,
-                    info.column2Weight,
-                    info.column3Weight,
+                    info.baseCurrencyColumnWeight,
+                    info.destinationCurrencyColumnWeight,
+                    info.exchangeRateColumnWeight,
                     info.column4Weight
                 )
             }
@@ -141,7 +139,9 @@ fun<T> TableItem(item: ExchangeRate,
               onEvent: ((T) -> Unit)? = null
 ) {
     Row(
-        Modifier.fillMaxWidth().height(IntrinsicSize.Min).clickable(onClick = {
+        Modifier.fillMaxWidth().height(IntrinsicSize.Min).clickable(
+            enabled = isFavourite != null,
+            onClick = {
             navigateCallBack?.let { navigateCallBack ->
                 onEvent?.invoke(navigateCallBack())
             }

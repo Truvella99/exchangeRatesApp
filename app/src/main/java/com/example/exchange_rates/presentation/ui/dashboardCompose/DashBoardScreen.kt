@@ -17,9 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -38,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -47,9 +46,7 @@ import com.example.exchange_rates.R
 import com.example.exchange_rates.presentation.ui.common.ErrorAlert
 import com.example.exchange_rates.presentation.ui.common.Table
 import com.example.exchange_rates.presentation.ui.common.TableInfo
-import com.example.exchange_rates.presentation.ui.homeCompose.HomeUiEvent
 import com.example.exchange_rates.util.TimeSpan
-import kotlin.text.ifEmpty
 
 @Composable
 fun DashBoardScreen(viewModel: DashboardViewModelCompose = hiltViewModel(), navController: NavController) {
@@ -128,12 +125,13 @@ fun DashBoardContent(
                     }
                 }
 
+                val screenWidth = LocalConfiguration.current.screenWidthDp.dp
                 DropdownMenu(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(0.95f),
                     expanded = isExpanded,
                     onDismissRequest = { isExpanded = false }
                 ) {
-                    Box(modifier = Modifier.size(width = 250.dp, height = 190.dp)) {
+                    Box(modifier = Modifier.size(width = screenWidth, height = 190.dp)) {
                         LazyColumn {
                             items(TimeSpan.entries) { item ->
                                 DropdownMenuItem(
@@ -157,14 +155,14 @@ fun DashBoardContent(
             Spacer(Modifier.height(16.dp))
             Table(
                 TableInfo(
-                    column1Title = "Base Currency",
-                    column2Title = "Destination Currency",
-                    column3Title = "Exchange Rate",
+                    baseCurrencyColumnTitle = "Base Currency",
+                    destinationCurrencyColumnTitle = "Destination Currency",
+                    exchangeRateColumnTitle = "Exchange Rate",
                     icon = Icons.Default.CalendarMonth,
-                    column1Weight = .24f,
-                    column2Weight = .25f,
-                    column3Weight = .25f,
-                    column4Weight = .26f,
+                    baseCurrencyColumnWeight = .24f,
+                    destinationCurrencyColumnWeight = .21f,
+                    exchangeRateColumnWeight = .25f,
+                    column4Weight = .3f,
                     data = state.historicalData
                 ),
                 onEvent = onEvent)
