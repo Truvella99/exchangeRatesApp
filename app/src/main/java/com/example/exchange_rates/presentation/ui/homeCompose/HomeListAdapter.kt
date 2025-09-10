@@ -1,4 +1,4 @@
-package com.example.exchange_rates.presentation.home
+package com.example.exchange_rates.presentation.ui.homeCompose
 
 import android.view.LayoutInflater
 import android.view.View

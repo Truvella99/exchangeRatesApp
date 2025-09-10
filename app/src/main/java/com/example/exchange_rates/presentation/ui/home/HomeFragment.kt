@@ -1,9 +1,8 @@
-package com.example.exchange_rates.presentation.home
+package com.example.exchange_rates.presentation.ui.home
 
 import android.R
 import com.example.exchange_rates.R as projectR
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,7 +62,7 @@ class HomeFragment : Fragment() {
         homeApiViewModel.currencies.observe(viewLifecycleOwner) { currencies ->
             val dropdown: Spinner = binding.menu
             context?.let { ctx ->
-                val adapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, currencies)
+                val adapter = ArrayAdapter(ctx, R.layout.simple_spinner_dropdown_item, currencies)
                 dropdown.adapter = adapter
 
                 // Optionally set selection if you want

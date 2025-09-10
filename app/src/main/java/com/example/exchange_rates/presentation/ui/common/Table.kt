@@ -1,0 +1,168 @@
+package com.example.exchange_rates.presentation.ui.common
+
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import com.example.exchange_rates.domain.model.ExchangeRate
+import com.example.exchange_rates.presentation.ui.homeCompose.HomeUiEvent
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun Table(
+    info: TableInfo, onEvent: (HomeUiEvent) -> Unit
+) {
+    LazyColumn(Modifier.fillMaxSize()) {
+        // Header
+        stickyHeader {
+            Row(
+                Modifier.background(Color.LightGray).fillMaxWidth().height(IntrinsicSize.Min).border(1.dp, Color.Black),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text( text = info.column1Title,
+                    Modifier
+                        .weight(info.column1Weight)
+                        .padding(8.dp),
+                    textAlign = TextAlign.Center
+                )
+                VerticalDivider(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(1.dp),
+                    thickness = DividerDefaults.Thickness, color = Color.Black
+                )
+                Text( text = info.column2Title,
+                    Modifier
+                        .weight(info.column2Weight)
+                        .padding(8.dp),
+                    textAlign = TextAlign.Center
+                )
+                VerticalDivider(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(1.dp),
+                    thickness = DividerDefaults.Thickness, color = Color.Black
+                )
+                Text( text = info.column3Title,
+                    Modifier
+                        .weight(info.column3Weight)
+                        .padding(8.dp),
+                    textAlign = TextAlign.Center
+                )
+                VerticalDivider(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(1.dp),
+                    color = Color.Black
+                )
+                Box(
+                    modifier = Modifier
+                        .weight(info.column4Weight)
+                        .padding(8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = info.icon,
+                        modifier = Modifier.size(35.dp),
+                        contentDescription = null
+                    )
+                }
+            }
+        }
+        // Table Items
+        itemsIndexed(info.data) { index, item ->
+            info.isDataFavourite?.let { isDataFavourite ->
+                // Home Page where Favourites Data are Present
+                TableItem(
+                    item,
+                    info.column1Weight,
+                    info.column2Weight,
+                    info.column3Weight,
+                    info.column4Weight,
+                    isDataFavourite[index],
+                    onEvent
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TableItem(item: ExchangeRate,
+              column1Weight: Float,
+              column2Weight: Float,
+              column3Weight: Float,
+              column4Weight: Float,
+              isFavourite: Boolean,
+              onEvent: (HomeUiEvent) -> Unit
+) {
+    Row(
+        Modifier.fillMaxWidth().height(IntrinsicSize.Min).clickable(onClick = {
+            onEvent(HomeUiEvent.SelectItem(item.baseCurrency,item.destinationCurrency))
+        }),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text( text = item.baseCurrency,
+            Modifier
+                .weight(column1Weight)
+                .padding(8.dp),
+            textAlign = TextAlign.Center
+        )
+        Text( text = item.destinationCurrency,
+            Modifier
+                .weight(column2Weight)
+                .padding(8.dp),
+            textAlign = TextAlign.Center
+        )
+        Text(text = item.exchangeRate.toString(),
+            Modifier
+                .weight(column3Weight)
+                .padding(8.dp),
+            textAlign = TextAlign.Center,
+            maxLines = 1
+        )
+        Box(
+            modifier = Modifier
+                .weight(column4Weight)
+                .padding(8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                modifier = Modifier.clickable(
+                    onClick = {
+                        onEvent(HomeUiEvent.ToggleFavouriteCurrency(item))
+                    }
+                ),
+                imageVector = if (isFavourite) Icons.Default.Star else Icons.Default.StarBorder,
+                tint = if (isFavourite) Color(0xFFFFC107) else Color.Black,
+                contentDescription = null
+            )
+        }
+    }
+}

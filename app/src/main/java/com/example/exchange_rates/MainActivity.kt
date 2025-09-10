@@ -11,6 +11,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val useCompose: Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -18,9 +20,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         // Setup the navigation Controller
         val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            .findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
         // Setup the Navigation Graph through XML layout
-        val navController = navHostFragment.navController
-        navController.setGraph(R.navigation.nav_graph)
+        val navController = navHostFragment?.navController
+        if (useCompose) {
+            navController?.setGraph(R.navigation.nav_graph_compose)
+        } else {
+            navController?.setGraph(R.navigation.nav_graph)
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.exchange_rates.presentation.dashboard
+package com.example.exchange_rates.presentation.ui.dashboard
 
 import android.R
 import android.os.Bundle
@@ -16,11 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.exchange_rates.NavArgs
 import com.example.exchange_rates.R as projectR
 import com.example.exchange_rates.databinding.FragmentDashboardBinding
-import com.example.exchange_rates.domain.model.ExchangeRate
 import com.example.exchange_rates.util.TimeSpan
 import com.google.android.material.card.MaterialCardView
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.LocalDate
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {

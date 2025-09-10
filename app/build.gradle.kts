@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.compose.compiler)
     id("dagger.hilt.android.plugin")
     kotlin("kapt")
 }
@@ -38,6 +39,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     testOptions {
         unitTests {
@@ -47,7 +49,23 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.androidx.material3)
+    // Compose BOM - this manages all compose library versions
+    val composeBom = platform("androidx.compose:compose-bom:2024.02.00")
+    implementation(composeBom)
+    // Core Compose dependencies
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.runtime:runtime")
+    // Activity Compose (if you're using activities)
+    implementation("androidx.activity:activity-compose:1.8.2")
+    // Hilt Compose
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    // Optional - for debugging
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

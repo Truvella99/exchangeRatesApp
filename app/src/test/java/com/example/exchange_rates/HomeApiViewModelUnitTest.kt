@@ -3,7 +3,7 @@ package com.example.exchange_rates
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.exchange_rates.domain.usecases.FetchLatestExchangeUseCase
 import com.example.exchange_rates.domain.usecases.GetCurrenciesUseCase
-import com.example.exchange_rates.presentation.home.HomeApiViewModel
+import com.example.exchange_rates.presentation.ui.home.HomeApiViewModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify

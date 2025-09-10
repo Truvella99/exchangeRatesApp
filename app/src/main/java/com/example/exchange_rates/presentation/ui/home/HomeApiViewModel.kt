@@ -1,4 +1,4 @@
-package com.example.exchange_rates.presentation.home
+package com.example.exchange_rates.presentation.ui.home
 
 import android.util.Log
 import androidx.lifecycle.LiveData

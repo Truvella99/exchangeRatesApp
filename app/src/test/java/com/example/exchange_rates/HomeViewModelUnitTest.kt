@@ -1,7 +1,7 @@
 package com.example.exchange_rates
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.exchange_rates.presentation.home.HomeViewModel
+import com.example.exchange_rates.presentation.ui.home.HomeViewModel
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

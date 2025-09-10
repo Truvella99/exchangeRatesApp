@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph"
+    android:id="@+id/nav_graph_compose"
     app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.exchange_rates.presentation.ui.home.HomeFragment"
+        android:name="com.example.exchange_rates.presentation.ui.homeCompose.HomeFragmentCompose"
         android:label="Home" >
         <action
-            android:id="@+id/action_homeFragment_to_dashboardFragment2"
-            app:destination="@id/dashboardFragment" />
+            android:id="@+id/action_homeFragment_to_dashboardFragment_Compose"
+            app:destination="@id/dashboardFragmentCompose" />
     </fragment>
 
     <fragment
-        android:id="@+id/dashboardFragment"
-        android:name="com.example.exchange_rates.presentation.ui.dashboard.DashboardFragment"
+        android:id="@+id/dashboardFragmentCompose"
+        android:name="com.example.exchange_rates.presentation.ui.dashboardCompose.DashboardFragmentCompose"
         android:label="Dashboard" >
 
         <argument
