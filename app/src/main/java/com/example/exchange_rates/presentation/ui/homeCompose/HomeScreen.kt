@@ -11,13 +11,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -44,9 +49,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.exchange_rates.NavArgs
 import com.example.exchange_rates.R
+import com.example.exchange_rates.presentation.ui.common.ErrorAlert
 import com.example.exchange_rates.presentation.ui.common.Table
 import com.example.exchange_rates.presentation.ui.common.TableInfo
 
@@ -68,6 +75,7 @@ fun HomeScreen(viewModel: HomeViewModelCompose = hiltViewModel(), navController:
                 is HomeUiEffect.FetchNewExchangeRates -> viewModel.fetchNewExchangeRates(effect.selectedCurrency)
                 is HomeUiEffect.UpdateTab -> viewModel.updateTab(effect.index)
                 is HomeUiEffect.UpdateFavourites -> viewModel.toggleFavouriteCurrency(effect.currency)
+                is HomeUiEffect.ClearError -> viewModel.clearError()
             }
         }
     }
@@ -83,8 +91,14 @@ fun HomeScreen(viewModel: HomeViewModelCompose = hiltViewModel(), navController:
 fun HomeContent(state: HomeUiState, onEvent: (HomeUiEvent) -> Unit) {
     var isExpanded by remember { mutableStateOf(false) }
 
+    ErrorAlert(
+        state.errorMessage,
+        onEvent = onEvent,
+        clearErrorCallBack = { HomeUiEvent.ClearError() }
+    )
+
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().padding(start = 10.dp, end = 10.dp)
     ) {
         Text(
             text = "Select Currency:",
@@ -163,7 +177,14 @@ fun HomeContent(state: HomeUiState, onEvent: (HomeUiEvent) -> Unit) {
                     state.exchangeRates.filter { !it.value }.values.toList()
                 else
                     state.exchangeRates.filter { it.value }.values.toList(),
-            ), onEvent)
+            ),
+            navigateCallBack = { item ->
+                HomeUiEvent.SelectItem(item.baseCurrency, item.destinationCurrency)
+            },
+            setAsFavouriteCallBack = { item ->
+                HomeUiEvent.ToggleFavouriteCurrency(item)
+            },
+            onEvent = onEvent)
     }
 }
 

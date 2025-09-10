@@ -31,12 +31,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.exchange_rates.domain.model.ExchangeRate
+import com.example.exchange_rates.presentation.ui.dashboardCompose.DashBoardUiEvent
 import com.example.exchange_rates.presentation.ui.homeCompose.HomeUiEvent
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Table(
-    info: TableInfo, onEvent: (HomeUiEvent) -> Unit
+fun<T> Table(
+    info: TableInfo, onEvent: (T) -> Unit,
+    // Nullable Callbacks (defined for home events, null for Dashboard Since no Events
+    navigateCallBack: ((ExchangeRate) -> T)? = null,
+    setAsFavouriteCallBack: ((ExchangeRate) -> T)? = null
 ) {
     LazyColumn(Modifier.fillMaxSize()) {
         // Header
@@ -97,7 +101,7 @@ fun Table(
         }
         // Table Items
         itemsIndexed(info.data) { index, item ->
-            info.isDataFavourite?.let { isDataFavourite ->
+            if (info.isDataFavourite != null) {
                 // Home Page where Favourites Data are Present
                 TableItem(
                     item,
@@ -105,8 +109,19 @@ fun Table(
                     info.column2Weight,
                     info.column3Weight,
                     info.column4Weight,
-                    isDataFavourite[index],
-                    onEvent
+                    info.isDataFavourite[index],
+                    navigateCallBack = navigateCallBack?.let { cb -> { cb(item)} },
+                    setAsFavouriteCallBack = setAsFavouriteCallBack?.let { cb -> { cb(item)} },
+                    onEvent = onEvent
+                )
+            } else {
+                // DashBoard Page Where there are no Favourites
+                TableItem<DashBoardUiEvent>(
+                    item,
+                    info.column1Weight,
+                    info.column2Weight,
+                    info.column3Weight,
+                    info.column4Weight
                 )
             }
         }
@@ -114,17 +129,22 @@ fun Table(
 }
 
 @Composable
-fun TableItem(item: ExchangeRate,
+fun<T> TableItem(item: ExchangeRate,
               column1Weight: Float,
               column2Weight: Float,
               column3Weight: Float,
               column4Weight: Float,
-              isFavourite: Boolean,
-              onEvent: (HomeUiEvent) -> Unit
+              // Nullable Callbacks (defined for home events, null for Dashboard Since no Events
+              isFavourite: Boolean? = null,
+              navigateCallBack: (() -> T)? = null,
+              setAsFavouriteCallBack: (() -> T)? = null,
+              onEvent: ((T) -> Unit)? = null
 ) {
     Row(
         Modifier.fillMaxWidth().height(IntrinsicSize.Min).clickable(onClick = {
-            onEvent(HomeUiEvent.SelectItem(item.baseCurrency,item.destinationCurrency))
+            navigateCallBack?.let { navigateCallBack ->
+                onEvent?.invoke(navigateCallBack())
+            }
         }),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -153,16 +173,20 @@ fun TableItem(item: ExchangeRate,
                 .padding(8.dp),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                modifier = Modifier.clickable(
-                    onClick = {
-                        onEvent(HomeUiEvent.ToggleFavouriteCurrency(item))
-                    }
-                ),
-                imageVector = if (isFavourite) Icons.Default.Star else Icons.Default.StarBorder,
-                tint = if (isFavourite) Color(0xFFFFC107) else Color.Black,
-                contentDescription = null
-            )
+            if (setAsFavouriteCallBack != null) {
+                Icon(
+                    modifier = Modifier.clickable(
+                        onClick = {
+                            onEvent?.invoke(setAsFavouriteCallBack())
+                        }
+                    ),
+                    imageVector = if (isFavourite == true) Icons.Default.Star else Icons.Default.StarBorder,
+                    tint = if (isFavourite == true) Color(0xFFFFC107) else Color.Black,
+                    contentDescription = null
+                )
+            } else {
+                Text(item.date.toString())
+            }
         }
     }
 }

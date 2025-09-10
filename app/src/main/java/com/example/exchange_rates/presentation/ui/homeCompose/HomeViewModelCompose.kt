@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.exchange_rates.domain.model.ExchangeRate
 import com.example.exchange_rates.domain.usecases.FetchLatestExchangeUseCase
 import com.example.exchange_rates.domain.usecases.GetCurrenciesUseCase
+import com.example.exchange_rates.presentation.ui.homeCompose.HomeUiEffect.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -51,18 +52,23 @@ class HomeViewModelCompose @Inject constructor(
         viewModelScope.launch {
             when (event) {
                 is HomeUiEvent.SelectItem ->
-                    _uiEffect.emit(HomeUiEffect.NavigateToDetail(
-                        event.baseCurrency,
-                        event.destinationCurrency)
+                    _uiEffect.emit(
+                        NavigateToDetail(
+                            event.baseCurrency,
+                            event.destinationCurrency)
                     )
                 is HomeUiEvent.SelectCurrency ->
-                    _uiEffect.emit(HomeUiEffect.FetchNewExchangeRates(
-                        event.selectedCurrency)
+                    _uiEffect.emit(
+                        FetchNewExchangeRates(
+                            event.selectedCurrency)
                     )
                 is HomeUiEvent.SelectTab ->
-                    _uiEffect.emit(HomeUiEffect.UpdateTab(event.index))
+                    _uiEffect.emit(UpdateTab(event.index))
                 is HomeUiEvent.ToggleFavouriteCurrency ->
-                    _uiEffect.emit(HomeUiEffect.UpdateFavourites(event.currency))
+                    _uiEffect.emit(UpdateFavourites(event.currency))
+
+                is HomeUiEvent.ClearError ->
+                    _uiEffect.emit(ClearError())
             }
         }
     }
@@ -94,6 +100,10 @@ class HomeViewModelCompose @Inject constructor(
                 it.copy(exchangeRates = newExchangeRates)
             }
         }
+    }
+
+    fun clearError() {
+        _uiState.update { it.copy(errorMessage = "") }
     }
 
     private suspend fun getAllCurrencies(): Result<List<String>>? {

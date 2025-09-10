@@ -12,5 +12,5 @@ data class TableInfo(
     val column3Weight: Float,
     val column4Weight: Float,
     val data: List<ExchangeRate>,
-    val isDataFavourite: List<Boolean>?
+    val isDataFavourite: List<Boolean>? = null
 )

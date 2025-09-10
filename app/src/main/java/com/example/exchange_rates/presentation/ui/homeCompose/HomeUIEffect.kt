@@ -7,4 +7,5 @@ sealed class HomeUiEffect {
     data class UpdateTab(val index: Int): HomeUiEffect()
     data class NavigateToDetail(val baseCurrency: String, val destinationCurrency: String): HomeUiEffect()
     data class UpdateFavourites(val currency: ExchangeRate): HomeUiEffect()
+    class ClearError: HomeUiEffect()
 }
