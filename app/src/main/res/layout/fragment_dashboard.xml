@@ -8,27 +8,42 @@
 
     <TextView
         android:id="@+id/top_label"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
+        android:gravity="start"
+        android:layout_margin="10dp"
         android:text="@string/select_the_timespan"
         android:textColor="@android:color/black"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_margin="10dp"
+        android:text="@string/dashboard_description"
+        app:layout_constraintBottom_toTopOf="@+id/timespan"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/top_label"
+        app:layout_constraintVertical_bias="0.393" />
 
     <Spinner
         android:id="@+id/timespan"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="132dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"/>
 
     <LinearLayout
         android:id="@+id/tableContainer"
@@ -52,7 +67,7 @@
             <TextView
                 android:id="@+id/baseCurrency"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:padding="5dp"
@@ -70,7 +85,7 @@
             <TextView
                 android:id="@+id/destinationCurrency"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/destination_currency"
@@ -88,7 +103,7 @@
             <TextView
                 android:id="@+id/exchangeRate"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/exchange_rate"
@@ -106,7 +121,7 @@
             <ImageView
                 android:id="@+id/isFavourite"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:src="@android:drawable/ic_menu_today"
@@ -120,29 +135,12 @@
         <!-- Recycler view for populating data in a table format -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/itemsRecyclerViewTimeSpan"
-            android:layout_width="410dp"
-            android:layout_height="476dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/timespan"
-            app:layout_constraintVertical_bias="1.0" />
+            />
 
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:contentDescription="back"
-        android:src="@android:drawable/ic_media_previous"
-        app:backgroundTint="@color/design_default_color_primary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@android:color/white" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/errorSnackbar"
@@ -169,31 +167,31 @@
             <TextView
                 android:id="@+id/errorSnackbarText"
                 android:layout_width="0dp"
+                android:layout_weight="10"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
             <ImageView
                 android:id="@+id/closeSnackbar"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
                 app:tint="@android:color/white" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="401dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="12dp"
-        android:text="@string/dashboard_description"
-        app:layout_constraintBottom_toTopOf="@+id/timespan"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="back"
+        android:src="@android:drawable/ic_media_previous"
+        app:backgroundTint="@color/design_default_color_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/top_label"
-        app:layout_constraintVertical_bias="0.393" />
+        app:tint="@android:color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
